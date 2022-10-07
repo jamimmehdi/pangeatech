@@ -28,6 +28,6 @@ export default function LineChart() {
         datasets: [...datasets],
     };
     return (
-        <Line data={data} />
+        <Line data={data} height={"100px"} width={"400px"}/>
     )
 }

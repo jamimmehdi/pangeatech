@@ -29,7 +29,7 @@ export default function TableData() {
     }, [currentPage])
     return (
             <TableContainer>
-                <Table >
+                <Table size='sm'>
                     <TableCaption>All Revenue Data</TableCaption>
                     <Thead>
                         <Tr>
