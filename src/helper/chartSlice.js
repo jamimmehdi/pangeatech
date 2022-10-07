@@ -34,6 +34,10 @@ export const chartSlice = createSlice({
             else (state.activeFilter.push(action.payload))
         },
         filterData: (state, action) => {
+            if (state.activeFilter.length < 1) {
+                state.data = [...action.payload];
+                return;
+            }
             if (state.activeFilter.includes('alldata')) {
                 state.data = [...action.payload];
                 return;
