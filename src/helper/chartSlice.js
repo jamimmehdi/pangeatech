@@ -1,58 +1,34 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 export const chartSlice = createSlice({
-    name: 'chart',
+    name: 'revenue',
     initialState: {
-        rawData: [],
+        isLoading: false,
         data: [],
-        filter: [],
-        currentPageData: [],
-        currentPage: 1,
-        activeFilter: []
+        sumOfRevenueProduct: {},
+        filterList: [],
+        activeFilter: [],
     },
     reducers: {
-        loadData: (state, action) => {
-            state.rawData = [...action.payload];
+        setLoading: (state, action) => {
+            state.isLoading = action.payload;
+        },
+        setData: (state, action) => {
             state.data = [...action.payload];
-            state.filter = [...new Set(action.payload.map((item) => item.revenue_type))];
-        },
-        revenueTypeFilter: (state, action) => {
-            state.filter = [...action.payload]
-        },
-        setCurrentPageData: (state, action) => {
-            state.currentPageData = state.data.slice(action.payload * 10, (action.payload + 1) * 10);
-        },
-        setCurrentPage: (state, action) => {
-            state.currentPage = action.payload;
-        },
-        addFilter: (state, action) => {
-            if (action.payload === "alldata") {
-                state.activeFilter = ['alldata']
-                return;
-            }
-            if (state.activeFilter.includes(action.payload)) state.activeFilter.splice(state.activeFilter.indexOf(action.payload), 1);
-            else (state.activeFilter.push(action.payload))
-        },
-        filterData: (state, action) => {
-            if (state.activeFilter.length < 1) {
-                state.data = [...action.payload];
-                return;
-            }
-            if (state.activeFilter.includes('alldata')) {
-                state.data = [...action.payload];
-                return;
-            }
 
-            let filteredItems = [];
-            state.activeFilter.forEach((filter) => {
-                const filterItem = action.payload.filter((item) => item.revenue_type === filter);
-                filteredItems = [...filteredItems, ...filterItem];
+            const sumOfRevenueProduct = {};
+            action.payload.forEach((data) => {
+                if (!state.filterList.includes(data.revenue_type)) state.filterList = [...state.filterList, data.revenue_type];
+                if (!Object.hasOwn(sumOfRevenueProduct, data.month)) sumOfRevenueProduct[data.month] = {};
+                if (!Object.hasOwn(sumOfRevenueProduct[data.month], data.product)) sumOfRevenueProduct[data.month][data.product] = 0;
+                sumOfRevenueProduct[data.month][data.product] += data.acv;
             })
-            state.data = [...filteredItems];
-        }
+
+            state.sumOfRevenueProduct = { ...sumOfRevenueProduct };
+        },
     },
 })
 
-export const { loadData, revenueTypeFilter, setCurrentPageData, setCurrentPage, addFilter, filterData } = chartSlice.actions
+export const { setData, setLoading } = chartSlice.actions;
 
 export default chartSlice.reducer;

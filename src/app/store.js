@@ -3,6 +3,6 @@ import chartSlice from '../helper/chartSlice'
 
 export default configureStore({
     reducer: {
-        chart: chartSlice,
+        revenue: chartSlice,
     },
 })

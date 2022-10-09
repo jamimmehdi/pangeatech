@@ -1,35 +1,16 @@
-import axios from 'axios';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import './App.scss';
-import LineChart from './components/Chart/Chart';
-import Navbar from './components/Navbar/Navbar';
-import TableData from './components/Table/Table';
-import { loadData, setCurrentPageData } from './helper/chartSlice';
 
-function App() {
-  const dispatch = useDispatch()
+import { Box } from "@chakra-ui/react";
+import Chart from "./components/Chart";
+import Navbar from "./components/Navbar";
+import TableData from "./components/Table";
 
-  const fetchData = async () => {
-    const URL = `http://fetest.pangeatech.net/data`;
-    await axios.get(URL)
-      .then((response) => {
-        dispatch(loadData(response.data));
-        dispatch(setCurrentPageData(0));
-      })
-      .catch((err) => console.log(err))
-  }
+export default function App() {
 
-  useEffect(() => {
-    fetchData()
-  }, [])
   return (
-    <div className="main-container">
+    <Box>
       <Navbar />
-      <LineChart />
+      <Chart />
       <TableData />
-    </div>
-  );
+    </Box>
+  )
 }
-
-export default App;
